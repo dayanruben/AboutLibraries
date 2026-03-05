@@ -9,6 +9,7 @@ on:
 
 jobs:
   publish_archives:
+    if: github.repository == 'mikepenz/AboutLibraries'
     name: Publish Archives
     if: startsWith(github.ref, 'refs/tags/')
 
