@@ -1,5 +1,6 @@
 package com.mikepenz.aboutlibraries.ui.compose.variant
 
+import androidx.compose.foundation.OverscrollEffect
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -7,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberOverscrollEffect
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -18,15 +20,17 @@ import com.mikepenz.aboutlibraries.ui.compose.style.DefaultLibraryActionBadges
 import com.mikepenz.aboutlibraries.ui.compose.style.LibrariesStyle
 import com.mikepenz.aboutlibraries.ui.compose.style.LibraryActionBadges
 import com.mikepenz.aboutlibraries.ui.compose.style.orFallback
-import com.mikepenz.aboutlibraries.ui.compose.variant.refined.RefinedRow
-import com.mikepenz.aboutlibraries.ui.compose.variant.traditional.TraditionalRow
 
 /**
  * Theme-agnostic libraries list entry point.
  *
  * Dispatches to the chosen [variant]'s row composable. All [LibraryDetailMode] and
- * [LibraryActionMode] combinations are valid for both variants — the inner scaffold handles
+ * [LibraryActionMode] combinations are valid for both variants — the default [libraryRow] owns
  * inline expansion and the calling adapter handles sheet presentation via [onSheetRequest].
+ *
+ * Override [libraryRow] to take full control of an item's rendering. The slot owns the entire
+ * item visual — supply your own `Modifier.animateItem()`, expanded background, and (if desired)
+ * inline-detail expansion; the default delegates to the variant rows and animates the detail.
  */
 @Composable
 fun Libraries(
@@ -45,36 +49,13 @@ fun Libraries(
     header: (LazyListScope.() -> Unit)? = null,
     divider: (@Composable LazyItemScope.() -> Unit)? = null,
     footer: (LazyListScope.() -> Unit)? = null,
+    libraryRow: (@Composable LazyItemScope.(index: Int, library: Library, expanded: Boolean, toggle: () -> Unit, style: LibrariesStyle) -> Unit)? = null,
     onLibraryClick: ((Library) -> Boolean)? = null,
     onSheetRequest: ((Library) -> Unit)? = null,
     onActionClick: ((Library, LibraryActionKind) -> Boolean)? = null,
     onDialogRequest: ((Library) -> Unit)? = null,
+    overscrollEffect: OverscrollEffect? = rememberOverscrollEffect(),
 ) {
-    val row: @Composable LazyItemScope.(Library, Boolean, () -> Unit) -> Unit =
-        remember(variant, density, badges, style) {
-            { library, expanded, toggle ->
-                when (variant) {
-                    LibrariesVariant.Traditional -> TraditionalRow(
-                        library = library,
-                        expanded = expanded,
-                        onToggle = toggle,
-                        density = density,
-                        badges = badges,
-                        style = style,
-                    )
-
-                    LibrariesVariant.Refined -> RefinedRow(
-                        library = library,
-                        expanded = expanded,
-                        onToggle = toggle,
-                        density = density,
-                        badges = badges,
-                        style = style,
-                    )
-                }
-            }
-        }
-
     val inlineDetail: (@Composable (Library) -> Unit)? = remember(
         detailMode, variant, style, actionMode, actionLabels, onActionClick, onDialogRequest,
     ) {
@@ -106,11 +87,38 @@ fun Libraries(
         }
     }
 
+    val expandedBackground = style.colors.rowExpandedBackground.orFallback(Color.Unspecified)
+
+    // Adapts the public [libraryRow] slot (which receives the resolved [style]) to the scaffold's
+    // style-agnostic row contract. When no override is supplied it delegates to the public
+    // [LibraryRow], which owns the per-item wrapper (item animation + expanded background), the
+    // variant dispatch, and the inline-detail expansion.
+    val resolvedRow: @Composable LazyItemScope.(index: Int, library: Library, expanded: Boolean, toggle: () -> Unit) -> Unit =
+        { index, library, expanded, toggle ->
+            val rowContent = libraryRow
+            if (rowContent != null) {
+                rowContent(index, library, expanded, toggle, style)
+            } else {
+                LibraryRow(
+                    library = library,
+                    expanded = expanded,
+                    onToggle = toggle,
+                    style = style,
+                    variant = variant,
+                    density = density,
+                    badges = badges,
+                    expandedBackground = expandedBackground,
+                    inlineDetail = inlineDetail,
+                )
+            }
+        }
+
     LibraryListScaffold(
         libraries = libraries,
-        row = row,
+        row = resolvedRow,
         modifier = modifier,
         state = state,
+        overscrollEffect = overscrollEffect,
         contentPadding = contentPadding,
         itemSpacing = itemSpacing,
         detailMode = detailMode,
@@ -119,7 +127,5 @@ fun Libraries(
         header = header,
         divider = divider,
         footer = footer,
-        expandedBackground = style.colors.rowExpandedBackground.orFallback(Color.Unspecified),
-        inlineDetail = inlineDetail,
     )
 }

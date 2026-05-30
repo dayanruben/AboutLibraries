@@ -41,7 +41,7 @@ This library collects dependency details, including licenses at compile time, an
 
 ## Latest releases 🛠
 
-- Compose 1.11.x | New UI | AGP 8.13 | [v15.0.0-b02](https://github.com/mikepenz/AboutLibraries/tree/15.0.0-b02)
+- Compose 1.11.x | New UI | AGP 8.13 | [v15.0.0-b03](https://github.com/mikepenz/AboutLibraries/tree/15.0.0-b03)
 - Compose 1.10.x | AGP 9 | [v14.1.0](https://github.com/mikepenz/AboutLibraries/tree/14.1.0)
 - Compose 1.10.x | [v13.2.1](https://github.com/mikepenz/AboutLibraries/tree/13.2.1)
 
@@ -423,6 +423,35 @@ LibrariesContainer(
     }
 )
 ```
+
+#### Custom library row
+
+Override the `libraryRow` slot to take full control of how each library item is rendered. The
+slot provides the `index`, `library`, `expanded` state, `toggle` callback, and the resolved
+`style`. Reuse the stock `LibraryRow` to only adjust its `modifier`, or replace it entirely with
+your own layout.
+
+```kotlin
+// adjust the default row (e.g. add horizontal padding) via the reusable `LibraryRow`
+LibrariesContainer(
+    libraries = libraries,
+    modifier = Modifier.fillMaxSize(),
+    libraryRow = { index, library, expanded, toggle, style ->
+        LibraryRow(
+            library = library,
+            expanded = expanded,
+            onToggle = toggle,
+            style = style,
+            modifier = Modifier.padding(horizontal = 8.dp),
+        )
+    },
+)
+```
+
+`LibraryRow` is a `LazyItemScope` extension (it calls `Modifier.animateItem()`), so it must be
+invoked from within the list item — which the `libraryRow` slot already provides. It owns the
+full item visual: item animation, expanded background, the variant row, and the inline-detail
+expansion.
 
 </p>
 </details>
