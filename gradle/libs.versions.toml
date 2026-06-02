@@ -10,13 +10,13 @@ lifecycle = { require = "2.10.0" }
 navigation = "2.9.8"
 recyclerView = "1.4.0"
 # google
-material = "1.13.0"
+material = "1.14.0"
 # other
 fastAdapter = "5.7.0"
 iconics = "5.5.0"
 itemAnimators = "1.1.0"
 ivy = "2.5.3"
-modelBuilder = "3.9.15"
+modelBuilder = "3.9.16"
 materialDrawer = "9.0.2"
 okhttp = "5.3.2"
 dejavu = "0.3.1"
