@@ -98,9 +98,8 @@ Tapping a library opens its details — inline, in a dialog, or in a bottom shee
 
 ## Latest releases 🛠
 
-- Compose 1.11.x | New UI | AGP 9 | Kotlin 2.4 | Compile 37 | [v15.0.4](https://github.com/mikepenz/AboutLibraries/tree/15.0.4)
+- Compose 1.11.x | New UI | AGP 9 | Kotlin 2.4 | Compile 37 | [v15.0.4](https://github.com/mikepenz/AboutLibraries/tree/15.0.4) / [v15.1.0-b01](https://github.com/mikepenz/AboutLibraries/tree/15.1.0-b01)
 - Compose 1.10.x | AGP 9 | [v14.1.0](https://github.com/mikepenz/AboutLibraries/tree/14.1.0)
-- Compose 1.10.x | [v13.2.1](https://github.com/mikepenz/AboutLibraries/tree/13.2.1)
 
 ## Gradle Plugin
 
@@ -218,6 +217,16 @@ aboutLibraries {
 
         // Enable inclusion of `platform` dependencies in the library report
         includePlatform = true
+
+        // Enable reporting of the Kotlin targets each library is consumed by, as a `targets` array
+        // on every library (e.g. ["android", "jvm", "iosX64"]). Target names are taken from the
+        // Kotlin target model, so a consumer can narrow the rendered list to what the running
+        // target links against: `libs.libraries.filter { "iosArm64" in it.targets }`.
+        // Only multiplatform projects report anything — an Android-only or JVM-only project builds
+        // a single implicit target, so every library reports an empty array.
+        // Disabled by default; when disabled the `targets` field is omitted from the output entirely.
+        // It can also be dropped per export via `excludeFields.add("Library.targets")`.
+        includeTargets = false
     }
 
     export {
@@ -269,6 +278,10 @@ aboutLibraries {
         duplicationMode = com.mikepenz.aboutlibraries.plugin.DuplicateMode.MERGE
         // Configure the duplication rule, to match "duplicates" with
         duplicationRule = com.mikepenz.aboutlibraries.plugin.DuplicateRule.SIMPLE
+        // Report the per-platform artifacts of a Kotlin Multiplatform publication under the declared
+        // root coordinate (`androidx.collection:collection`, not `androidx.collection:collection-jvm`).
+        // Unrelated to Android build variants — see `filterVariants` for those.
+        mergePlatformArtifacts = true
     }
 }
 ```
