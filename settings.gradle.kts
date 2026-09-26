@@ -14,6 +14,9 @@ pluginManagement {
             if (requested.id.id.startsWith("com.android.")) {
                 useVersion("9.1.1")
             }
+            if (requested.id.id == "app.cash.paparazzi") {
+                useVersion("2.0.0-alpha05")
+            }
             if (requested.id.id.startsWith("com.mikepenz.convention.")) {
                 useVersion(conventionPluginVersion)
             }
