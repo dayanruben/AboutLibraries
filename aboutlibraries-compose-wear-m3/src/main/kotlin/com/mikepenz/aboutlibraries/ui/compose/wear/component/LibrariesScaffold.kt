@@ -130,8 +130,8 @@ fun WearLibrariesScaffold(
 
                     if (license != null && library.licenses.isNotEmpty()) {
                         FlowRow {
-                            library.licenses.forEach {
-                                license(it)
+                            for (libraryLicense in library.licenses) {
+                                license(libraryLicense)
                             }
                         }
                     }
