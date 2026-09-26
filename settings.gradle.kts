@@ -11,6 +11,9 @@ pluginManagement {
             if (requested.id.id.startsWith("org.jetbrains.kotlin.")) {
                 useVersion(kotlinVersion)
             }
+            if (requested.id.id.startsWith("com.android.")) {
+                useVersion("9.1.1")
+            }
             if (requested.id.id.startsWith("com.mikepenz.convention.")) {
                 useVersion(conventionPluginVersion)
             }
