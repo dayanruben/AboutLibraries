@@ -14,6 +14,9 @@ pluginManagement {
             if (requested.id.id.startsWith("com.mikepenz.convention.")) {
                 useVersion(conventionPluginVersion)
             }
+            if (requested.id.id == "com.github.skydoves.compose.stability.analyzer") {
+                useVersion("0.13.0")
+            }
         }
     }
     repositories {
