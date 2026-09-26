@@ -33,5 +33,5 @@ jobs:
       - uses: gradle/actions/setup-gradle@v5
       - name: Register installed JDK toolchains
         run: echo 'org.gradle.java.installations.fromEnv=JAVA_HOME_11_ARM64,JAVA_HOME_11_X64,JAVA_HOME_17_ARM64,JAVA_HOME_17_X64' >> "$HOME/.gradle/gradle.properties"
-      - name: Build the Gradle plugin with Kotlin EAP
-        run: ./gradlew -p plugin-build build --stacktrace
+      - name: Build the full project with Kotlin EAP
+        run: ./gradlew build -Pkotlin.native.ignoreDisabledTargets=true --stacktrace

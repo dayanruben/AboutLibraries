@@ -2,10 +2,14 @@ include(":plugin")
 
 pluginManagement {
     val kotlinVersion = "2.5.0-Beta1"
+    val conventionPluginVersion = "0.11.0"
     resolutionStrategy {
         eachPlugin {
             if (requested.id.id.startsWith("org.jetbrains.kotlin.")) {
                 useVersion(kotlinVersion)
+            }
+            if (requested.id.id.startsWith("com.mikepenz.convention.")) {
+                useVersion(conventionPluginVersion)
             }
         }
     }
