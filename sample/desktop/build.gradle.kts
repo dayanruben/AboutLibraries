@@ -12,6 +12,7 @@ kotlin {
         commonMain.dependencies {
             implementation(project(":aboutlibraries-compose"))
             implementation(project(":sample:shared"))
+            implementation(compose.runtime)
             implementation(compose.components.resources)
         }
         jvmMain.dependencies {
