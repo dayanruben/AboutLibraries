@@ -2,7 +2,7 @@ plugins {
     id("com.mikepenz.convention.android-library")
     id("com.mikepenz.convention.compose")
     id("com.mikepenz.convention.publishing")
-    alias(baseLibs.plugins.stabilityAnalyzer)
+    id("com.github.skydoves.compose.stability.analyzer")
 }
 
 android {

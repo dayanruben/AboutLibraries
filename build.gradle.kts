@@ -19,7 +19,7 @@ plugins {
     alias(baseLibs.plugins.mavenPublish) apply false
     alias(baseLibs.plugins.binaryCompatiblityValidator) apply false
     alias(baseLibs.plugins.versionCatalogUpdate) apply false
-    alias(baseLibs.plugins.stabilityAnalyzer) apply false
+    id("com.github.skydoves.compose.stability.analyzer") apply false
     alias(baseLibs.plugins.paparazzi) apply false
 
     alias(libs.plugins.navSafeArgs) apply false
