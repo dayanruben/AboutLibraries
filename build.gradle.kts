@@ -24,3 +24,9 @@ plugins {
 
     alias(libs.plugins.navSafeArgs) apply false
 }
+subprojects {
+    val androidMainCompilation = tasks.matching { it.name == "compileAndroidMain" }
+    tasks.matching { it.name == "stabilityCheck" }.configureEach {
+        dependsOn(androidMainCompilation)
+    }
+}
