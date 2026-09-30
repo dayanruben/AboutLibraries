@@ -4,7 +4,7 @@ rootProject.name = "AboutLibraries"
 // enableFeaturePreview("STABLE_CONFIGURATION_CACHE")
 
 pluginManagement {
-    val kotlinVersion = "2.5.0-Beta1"
+    val kotlinVersion = "2.4.21-RC"
     val conventionPluginVersion = "0.11.0"
     resolutionStrategy {
         eachPlugin {
