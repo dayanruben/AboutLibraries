@@ -31,6 +31,8 @@ jobs:
           distribution: 'zulu'
           java-version: '21'
       - uses: gradle/actions/setup-gradle@v5
+      - name: Copy CI gradle.properties
+        run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
       - name: Register installed JDK toolchains
         run: echo 'org.gradle.java.installations.fromEnv=JAVA_HOME_11_ARM64,JAVA_HOME_11_X64,JAVA_HOME_17_ARM64,JAVA_HOME_17_X64' >> "$HOME/.gradle/gradle.properties"
       - name: Build the full project with Kotlin EAP
