@@ -45,7 +45,7 @@ plugins.withType<org.jetbrains.kotlin.gradle.targets.js.yarn.YarnPlugin> {
         resolution("launch-editor", "2.14.1")
         resolution("lodash", "4.18.0")
         resolution("micromatch", "4.0.8")
-        resolution("node-forge", "1.4.0")
+        resolution("node-forge", "1.4.1")
         resolution("on-headers", "1.1.0")
         resolution("path-to-regexp", "0.1.13")
         resolution("picomatch", "2.3.2")
