@@ -199,13 +199,13 @@ jobs:
           category: lint-sample-android
 
       - name: Prepare Keystore and Local.
-        if: startsWith(github.ref, 'refs/tags/')
+        if: github.repository == 'mikepenz/AboutLibraries' && startsWith(github.ref, 'refs/tags/')
         run: |
           echo "${{ secrets.KEYSTORE }}" > opensource.jks.asc
           gpg -d --passphrase "${{ secrets.KEYSTORE_PASSPHRASE }}" --batch "opensource.jks.asc" > "sample/android/opensource.jks"
 
       - name: Build Release App
-        if: startsWith(github.ref, 'refs/tags/')
+        if: github.repository == 'mikepenz/AboutLibraries' && startsWith(github.ref, 'refs/tags/')
         run: ./gradlew sample:android:assembleRelease sample:android:bundleRelease -P"com.mikepenz.android.signing.enabled"="true" -P"com.mikepenz.android.signing.storeFile"="opensource.jks" -P"com.mikepenz.android.signing.storePassword"="${{ secrets.STORE_PASSWORD }}" -P"com.mikepenz.android.signing.keyAlias"="${{ secrets.KEY_ALIAS }}" -P"com.mikepenz.android.signing.keyPassword"="${{ secrets.KEY_PASSWORD }}"
 
       - name: Collect artifacts
@@ -226,7 +226,7 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     needs: build
-    if: startsWith(github.ref, 'refs/tags/')
+    if: github.repository == 'mikepenz/AboutLibraries' && startsWith(github.ref, 'refs/tags/')
     permissions:
       contents: write
       id-token: write # mint the Sigstore certificate for provenance
