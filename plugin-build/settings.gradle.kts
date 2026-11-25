@@ -1,7 +1,7 @@
 include(":plugin")
 
 pluginManagement {
-    val kotlinVersion = "2.5.0-RC"
+    val kotlinVersion = "2.5.0-RC2"
     val conventionPluginVersion = "0.11.0"
     resolutionStrategy {
         eachPlugin {
